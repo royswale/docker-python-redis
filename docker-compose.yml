@@ -1,14 +1,27 @@
 version: "3.9"
 
+networks:
+  proxy:
+    external: true
+    name: network-nginx-proxy
+  default:
+    name: network-python-flask-redis-app
+
 volumes:
   volume-redis:
 
 services:
   web:
+    container_name: python-flask-service
     build: .
     ports:
       - "5000:5000"
+    networks:
+      - proxy
+      - default
+
   redis:
+    container_name: python-flask-redis
     image: redis
     volumes:
       - volume-redis:/data
